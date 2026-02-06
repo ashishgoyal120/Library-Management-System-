@@ -2,8 +2,6 @@ package com.library.management.dto;
 
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
-import jakarta.validation.constraints.NotNull;
-import java.time.LocalDate;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -13,10 +11,13 @@ import lombok.NoArgsConstructor;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-public class UserDTO {
-    private Long id;
+public class RegisterRequestDTO {
 
+    @NotBlank(message = "username is required")
     private String username;
+
+    @NotBlank(message = "password is required")
+    private String password;
 
     @NotBlank(message = "name is required")
     private String name;
@@ -27,8 +28,5 @@ public class UserDTO {
 
     private String phone;
     private String address;
-
-    @NotNull(message = "membershipDate is required")
-    private LocalDate membershipDate;
 }
 

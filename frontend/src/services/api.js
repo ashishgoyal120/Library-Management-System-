@@ -67,3 +67,9 @@ export const DashboardApi = {
   stats: () => api.get(`/api/dashboard/stats`),
 };
 
+// Auth
+export const AuthApi = {
+  login: (payload) => api.post(`/api/auth/login`, payload),
+  register: (payload) => api.post(`/api/auth/register`, payload),
+};
+

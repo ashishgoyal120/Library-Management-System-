@@ -34,6 +34,7 @@ final class Mapper {
     static UserDTO toDto(User u) {
         return UserDTO.builder()
                 .id(u.getId())
+                .username(u.getUsername())
                 .name(u.getName())
                 .email(u.getEmail())
                 .phone(u.getPhone())

@@ -13,11 +13,11 @@ VALUES
   (2, 'Fantasy', 'Fantasy works.', NOW(), NOW())
 ON DUPLICATE KEY UPDATE name=VALUES(name), description=VALUES(description), updated_at=NOW();
 
-INSERT INTO users (id, name, email, phone, address, membership_date, created_at, updated_at)
+INSERT INTO users (id, username, password, name, email, phone, address, membership_date, created_at, updated_at)
 VALUES
-  (1, 'Alice Johnson', 'alice@example.com', '9999999999', '123 Main St', CURDATE(), NOW(), NOW()),
-  (2, 'Bob Smith', 'bob@example.com', '8888888888', '456 Park Ave', CURDATE(), NOW(), NOW())
-ON DUPLICATE KEY UPDATE name=VALUES(name), phone=VALUES(phone), address=VALUES(address), updated_at=NOW();
+  (1, 'alice', 'password123', 'Alice Johnson', 'alice@example.com', '9999999999', '123 Main St', CURDATE(), NOW(), NOW()),
+  (2, 'bob', 'password123', 'Bob Smith', 'bob@example.com', '8888888888', '456 Park Ave', CURDATE(), NOW(), NOW())
+ON DUPLICATE KEY UPDATE username=VALUES(username), password=VALUES(password), name=VALUES(name), phone=VALUES(phone), address=VALUES(address), updated_at=NOW();
 
 INSERT INTO books (id, title, isbn, publisher, publication_year, total_copies, available_copies, description, author_id, category_id, created_at, updated_at)
 VALUES

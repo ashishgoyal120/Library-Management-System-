@@ -14,6 +14,8 @@ import {
 } from '@mui/material';
 import { useMemo, useState } from 'react';
 import { useLocation, useNavigate } from 'react-router-dom';
+import { Button } from '@mui/material';
+import { useAuth } from '../../AuthContext';
 
 const drawerWidth = 260;
 
@@ -21,6 +23,8 @@ export function AppLayout({ children }) {
   const navigate = useNavigate();
   const location = useLocation();
   const [mobileOpen, setMobileOpen] = useState(false);
+  const { user, logout } = useAuth();
+  const showSidebar = !!user;
 
   const items = useMemo(
     () => [
@@ -70,48 +74,63 @@ export function AppLayout({ children }) {
     <Box className="app-root" sx={{ display: 'flex' }}>
       <AppBar position="fixed" color="inherit" elevation={0} sx={{ borderBottom: '1px solid #e5e7eb' }}>
         <Toolbar sx={{ gap: 1 }}>
-          <IconButton
-            edge="start"
-            onClick={() => setMobileOpen((v) => !v)}
-            sx={{ display: { xs: 'inline-flex', md: 'none' } }}
-          >
-            <span style={{ fontSize: 18 }}>☰</span>
-          </IconButton>
+          {showSidebar && (
+            <IconButton
+              edge="start"
+              onClick={() => setMobileOpen((v) => !v)}
+              sx={{ display: { xs: 'inline-flex', md: 'none' } }}
+            >
+              <span style={{ fontSize: 18 }}>☰</span>
+            </IconButton>
+          )}
           <Typography variant="h6" sx={{ fontWeight: 700 }}>
             Library Management System
           </Typography>
           <Box sx={{ flex: 1 }} />
-          <Typography variant="body2" sx={{ color: 'text.secondary' }}>
-            Backend: localhost:8080
-          </Typography>
+          {user ? (
+            <Box sx={{ display: 'flex', alignItems: 'center', gap: 1 }}>
+              <Typography variant="body2" sx={{ color: 'text.secondary' }}>
+                {user.username}
+              </Typography>
+              <Button size="small" onClick={logout}>
+                Logout
+              </Button>
+            </Box>
+          ) : (
+            <Button size="small" onClick={() => navigate('/login')}>
+              Login
+            </Button>
+          )}
         </Toolbar>
       </AppBar>
 
-      {/* Sidebar */}
-      <Box component="nav" sx={{ width: { md: drawerWidth }, flexShrink: { md: 0 } }}>
-        <Drawer
-          variant="temporary"
-          open={mobileOpen}
-          onClose={() => setMobileOpen(false)}
-          ModalProps={{ keepMounted: true }}
-          sx={{
-            display: { xs: 'block', md: 'none' },
-            '& .MuiDrawer-paper': { boxSizing: 'border-box', width: drawerWidth },
-          }}
-        >
-          {drawer}
-        </Drawer>
-        <Drawer
-          variant="permanent"
-          open
-          sx={{
-            display: { xs: 'none', md: 'block' },
-            '& .MuiDrawer-paper': { boxSizing: 'border-box', width: drawerWidth },
-          }}
-        >
-          {drawer}
-        </Drawer>
-      </Box>
+      {/* Sidebar (only when logged in) */}
+      {showSidebar && (
+        <Box component="nav" sx={{ width: { md: drawerWidth }, flexShrink: { md: 0 } }}>
+          <Drawer
+            variant="temporary"
+            open={mobileOpen}
+            onClose={() => setMobileOpen(false)}
+            ModalProps={{ keepMounted: true }}
+            sx={{
+              display: { xs: 'block', md: 'none' },
+              '& .MuiDrawer-paper': { boxSizing: 'border-box', width: drawerWidth },
+            }}
+          >
+            {drawer}
+          </Drawer>
+          <Drawer
+            variant="permanent"
+            open
+            sx={{
+              display: { xs: 'none', md: 'block' },
+              '& .MuiDrawer-paper': { boxSizing: 'border-box', width: drawerWidth },
+            }}
+          >
+            {drawer}
+          </Drawer>
+        </Box>
+      )}
 
       {/* Main */}
       <Box component="main" sx={{ flexGrow: 1, p: 2.5, mt: 8, width: { md: `calc(100% - ${drawerWidth}px)` } }}>

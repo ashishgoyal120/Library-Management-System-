@@ -34,11 +34,19 @@ public class UserService {
 
     @Transactional
     public UserDTO create(UserDTO dto) {
+        if (dto.getUsername() != null && !dto.getUsername().isBlank()) {
+            userRepository.findByUsernameIgnoreCase(dto.getUsername()).ifPresent(existing -> {
+                throw new BadRequestException("Username already exists: " + dto.getUsername());
+            });
+        }
         userRepository.findByEmailIgnoreCase(dto.getEmail()).ifPresent(existing -> {
             throw new BadRequestException("Email already exists: " + dto.getEmail());
         });
 
         User u = User.builder()
+                .username(dto.getUsername())
+                // No password via admin-create endpoint; users should register via /api/auth/register
+                .password("changeme")
                 .name(dto.getName())
                 .email(dto.getEmail())
                 .phone(dto.getPhone())
@@ -55,12 +63,21 @@ public class UserService {
         User u = userRepository.findById(id)
                 .orElseThrow(() -> new ResourceNotFoundException("User not found: " + id));
 
+        if (dto.getUsername() != null && !dto.getUsername().isBlank()) {
+            userRepository.findByUsernameIgnoreCase(dto.getUsername()).ifPresent(existing -> {
+                if (!existing.getId().equals(id)) {
+                    throw new BadRequestException("Username already exists: " + dto.getUsername());
+                }
+            });
+        }
+
         userRepository.findByEmailIgnoreCase(dto.getEmail()).ifPresent(existing -> {
             if (!existing.getId().equals(id)) {
                 throw new BadRequestException("Email already exists: " + dto.getEmail());
             }
         });
 
+        u.setUsername(dto.getUsername());
         u.setName(dto.getName());
         u.setEmail(dto.getEmail());
         u.setPhone(dto.getPhone());
