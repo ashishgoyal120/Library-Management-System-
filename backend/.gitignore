@@ -1,0 +1,24 @@
+# Maven / Spring Boot
+target/
+!.mvn/wrapper/maven-wrapper.jar
+
+# Logs
+*.log
+logs/
+
+# IDE / OS
+.idea/
+*.iml
+.classpath
+.project
+.settings/
+.vscode/
+
+# Environment / secrets
+.env
+*.properties.local
+
+# Generated
+hs_err_pid*
+replay_pid*
+
