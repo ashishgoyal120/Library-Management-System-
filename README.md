@@ -42,6 +42,7 @@ Optional env vars:
 - `SPRING_JPA_SHOW_SQL` (default: `false`)
 - `APP_LOG_LEVEL` (default: `INFO`)
 - `APP_CORS_ALLOWED_ORIGINS` (default: `http://localhost:3000`)
+- `APP_CORS_ALLOWED_ORIGIN_PATTERNS` (default: `https://*.onrender.com`)
 
 ## Running Locally (Supabase DB)
 
@@ -54,6 +55,7 @@ SPRING_DATASOURCE_URL=jdbc:postgresql://aws-1-ap-northeast-1.pooler.supabase.com
 SPRING_DATASOURCE_USERNAME=postgres.your_project_ref
 SPRING_DATASOURCE_PASSWORD=your_supabase_password
 APP_CORS_ALLOWED_ORIGINS=http://localhost:3000
+APP_CORS_ALLOWED_ORIGIN_PATTERNS=https://*.onrender.com
 ```
 
 ### 2. Run backend
@@ -120,6 +122,7 @@ This repo includes `render.yaml` for a backend web service and frontend static s
 - `SPRING_DATASOURCE_USERNAME`
 - `SPRING_DATASOURCE_PASSWORD`
 - `APP_CORS_ALLOWED_ORIGINS` (include your frontend Render URL)
+- `APP_CORS_ALLOWED_ORIGIN_PATTERNS` (set `https://*.onrender.com` or a stricter pattern)
 
 ### Frontend static site env vars (Render)
 

@@ -17,6 +17,8 @@ services:
         sync: false
       - key: APP_CORS_ALLOWED_ORIGINS
         sync: false
+      - key: APP_CORS_ALLOWED_ORIGIN_PATTERNS
+        sync: false
 
   - type: static
     name: library-management-frontend
