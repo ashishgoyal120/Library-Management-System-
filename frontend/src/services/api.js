@@ -1,7 +1,12 @@
 import axios from "axios";
 
-const API_BASE_URL =
-  process.env.REACT_APP_API_BASE_URL || "http://localhost:8080";
+const API_BASE_URL = process.env.REACT_APP_API_BASE_URL;
+
+if (!API_BASE_URL) {
+  throw new Error(
+    "Missing REACT_APP_API_BASE_URL. Set it in frontend env (or Render environment variables)."
+  );
+}
 
 export const api = axios.create({
   baseURL: API_BASE_URL,
