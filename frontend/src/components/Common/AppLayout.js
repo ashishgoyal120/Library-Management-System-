@@ -1,4 +1,4 @@
-import { MenuBook, People, Category, EditNote, Dashboard as DashboardIcon } from '@mui/icons-material';
+import { MenuBook, People, Category, EditNote, Dashboard as DashboardIcon, Menu } from '@mui/icons-material';
 import {
   AppBar,
   Box,
@@ -72,23 +72,36 @@ export function AppLayout({ children }) {
 
   return (
     <Box className="app-root" sx={{ display: 'flex' }}>
-      <AppBar position="fixed" color="inherit" elevation={0} sx={{ borderBottom: '1px solid #e5e7eb' }}>
-        <Toolbar sx={{ gap: 1 }}>
+      <AppBar
+        position="fixed"
+        color="inherit"
+        elevation={0}
+        sx={{
+          borderBottom: '1px solid #e5e7eb',
+          width: { md: showSidebar ? `calc(100% - ${drawerWidth}px)` : '100%' },
+          ml: { md: showSidebar ? `${drawerWidth}px` : 0 },
+        }}
+      >
+        <Toolbar sx={{ gap: 1, minHeight: { xs: 56, sm: 64 } }}>
           {showSidebar && (
             <IconButton
               edge="start"
               onClick={() => setMobileOpen((v) => !v)}
               sx={{ display: { xs: 'inline-flex', md: 'none' } }}
             >
-              <span style={{ fontSize: 18 }}>☰</span>
+              <Menu fontSize="small" />
             </IconButton>
           )}
-          <Typography variant="h6" sx={{ fontWeight: 700 }}>
+          <Typography
+            variant="h6"
+            noWrap
+            sx={{ fontWeight: 700, lineHeight: 1.2, minWidth: 0, flexShrink: 1 }}
+          >
             Library Management System
           </Typography>
           <Box sx={{ flex: 1 }} />
           {user ? (
-            <Box sx={{ display: 'flex', alignItems: 'center', gap: 1 }}>
+            <Box sx={{ display: 'flex', alignItems: 'center', gap: 1, flexShrink: 0 }}>
               <Typography variant="body2" sx={{ color: 'text.secondary' }}>
                 {user.username}
               </Typography>

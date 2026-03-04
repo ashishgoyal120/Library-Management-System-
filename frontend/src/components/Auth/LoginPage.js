@@ -1,7 +1,7 @@
 import { LockOpen } from '@mui/icons-material';
 import { Box, Button, Card, CardContent, Stack, TextField, Typography } from '@mui/material';
 import { useState } from 'react';
-import { Link, useLocation, useNavigate } from 'react-router-dom';
+import { Link, Navigate, useLocation, useNavigate } from 'react-router-dom';
 import { toast } from 'react-toastify';
 import { AuthApi, getErrorMessage } from '../../services/api';
 import { useAuth } from '../../AuthContext';
@@ -16,8 +16,7 @@ export function LoginPage() {
   const [loading, setLoading] = useState(false);
 
   if (user) {
-    // already logged in
-    navigate('/dashboard');
+    return <Navigate to="/dashboard" replace />;
   }
 
   function setField(name, value) {

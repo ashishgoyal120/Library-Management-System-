@@ -1,5 +1,5 @@
 import { CssBaseline, ThemeProvider } from '@mui/material';
-import { BrowserRouter, Navigate, Route, Routes } from 'react-router-dom';
+import { BrowserRouter, Navigate, Outlet, Route, Routes, useLocation } from 'react-router-dom';
 import { ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import './App.css';
@@ -22,8 +22,17 @@ import { AuthProvider, useAuth } from './AuthContext';
 
 function RequireAuth({ children }) {
   const { user } = useAuth();
+  const location = useLocation();
   if (!user) {
-    return <Navigate to="/login" replace />;
+    return <Navigate to="/login" replace state={{ from: location }} />;
+  }
+  return children;
+}
+
+function PublicOnly({ children }) {
+  const { user } = useAuth();
+  if (user) {
+    return <Navigate to="/dashboard" replace />;
   }
   return children;
 }
@@ -33,107 +42,85 @@ function AppInner() {
     <ThemeProvider theme={theme}>
       <CssBaseline />
       <BrowserRouter>
-        <AppLayout>
-          <Routes>
-            <Route path="/login" element={<LoginPage />} />
-            <Route path="/register" element={<RegisterPage />} />
+        <Routes>
+          <Route
+            path="/login"
+            element={
+              <PublicOnly>
+                <LoginPage />
+              </PublicOnly>
+            }
+          />
+          <Route
+            path="/register"
+            element={
+              <PublicOnly>
+                <RegisterPage />
+              </PublicOnly>
+            }
+          />
 
+          <Route
+            element={
+              <RequireAuth>
+                <AppLayout>
+                  <Outlet />
+                </AppLayout>
+              </RequireAuth>
+            }
+          >
             <Route path="/" element={<Navigate to="/dashboard" replace />} />
             <Route
               path="/dashboard"
-              element={
-                <RequireAuth>
-                  <Dashboard />
-                </RequireAuth>
-              }
+              element={<Dashboard />}
             />
 
             <Route
               path="/books"
-              element={
-                <RequireAuth>
-                  <BookList />
-                </RequireAuth>
-              }
+              element={<BookList />}
             />
             <Route
               path="/books/new"
-              element={
-                <RequireAuth>
-                  <BookForm mode="create" />
-                </RequireAuth>
-              }
+              element={<BookForm mode="create" />}
             />
             <Route
               path="/books/:id/edit"
-              element={
-                <RequireAuth>
-                  <BookForm mode="edit" />
-                </RequireAuth>
-              }
+              element={<BookForm mode="edit" />}
             />
             <Route
               path="/books/:id"
-              element={
-                <RequireAuth>
-                  <BookDetails />
-                </RequireAuth>
-              }
+              element={<BookDetails />}
             />
 
             <Route
               path="/authors"
-              element={
-                <RequireAuth>
-                  <AuthorsPage />
-                </RequireAuth>
-              }
+              element={<AuthorsPage />}
             />
             <Route
               path="/categories"
-              element={
-                <RequireAuth>
-                  <CategoriesPage />
-                </RequireAuth>
-              }
+              element={<CategoriesPage />}
             />
             <Route
               path="/members"
-              element={
-                <RequireAuth>
-                  <MembersPage />
-                </RequireAuth>
-              }
+              element={<MembersPage />}
             />
 
             <Route
               path="/borrow/issue"
-              element={
-                <RequireAuth>
-                  <IssueBookPage />
-                </RequireAuth>
-              }
+              element={<IssueBookPage />}
             />
             <Route
               path="/borrow/active"
-              element={
-                <RequireAuth>
-                  <ActiveBorrowsPage />
-                </RequireAuth>
-              }
+              element={<ActiveBorrowsPage />}
             />
             <Route
               path="/borrow/overdue"
-              element={
-                <RequireAuth>
-                  <OverdueBorrowsPage />
-                </RequireAuth>
-              }
+              element={<OverdueBorrowsPage />}
             />
+          </Route>
 
-            <Route path="*" element={<Navigate to="/dashboard" replace />} />
-          </Routes>
-        </AppLayout>
+          <Route path="*" element={<Navigate to="/dashboard" replace />} />
+        </Routes>
       </BrowserRouter>
 
       <ToastContainer position="top-right" autoClose={2500} hideProgressBar newestOnTop />
