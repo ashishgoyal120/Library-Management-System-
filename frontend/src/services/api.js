@@ -1,8 +1,9 @@
-import axios from 'axios';
+import axios from "axios";
 
 export const api = axios.create({
-  baseURL: 'http://localhost:8080',
-  headers: { 'Content-Type': 'application/json' },
+  //baseURL: 'http://localhost:8080',
+  baseURL: "https://library-management-system-34c0.onrender.com",
+  headers: { "Content-Type": "application/json" },
 });
 
 export function getErrorMessage(err) {
@@ -10,15 +11,17 @@ export function getErrorMessage(err) {
     err?.response?.data?.message ||
     err?.response?.data?.error ||
     err?.message ||
-    'Something went wrong';
+    "Something went wrong";
   return String(msg);
 }
 
 // Books
 export const BooksApi = {
   list: (page, size) => api.get(`/api/books`, { params: { page, size } }),
-  available: (page, size) => api.get(`/api/books/available`, { params: { page, size } }),
-  search: (keyword, page, size) => api.get(`/api/books/search`, { params: { keyword, page, size } }),
+  available: (page, size) =>
+    api.get(`/api/books/available`, { params: { page, size } }),
+  search: (keyword, page, size) =>
+    api.get(`/api/books/search`, { params: { keyword, page, size } }),
   get: (id) => api.get(`/api/books/${id}`),
   create: (payload) => api.post(`/api/books`, payload),
   update: (id, payload) => api.put(`/api/books/${id}`, payload),
@@ -55,7 +58,8 @@ export const UsersApi = {
 // Borrow
 export const BorrowApi = {
   issue: (payload) => api.post(`/api/borrow/issue`, payload),
-  returnBook: (borrowRecordId) => api.put(`/api/borrow/return/${borrowRecordId}`),
+  returnBook: (borrowRecordId) =>
+    api.put(`/api/borrow/return/${borrowRecordId}`),
   active: () => api.get(`/api/borrow/active`),
   overdue: () => api.get(`/api/borrow/overdue`),
   userHistory: (userId) => api.get(`/api/borrow/user/${userId}`),
@@ -72,4 +76,3 @@ export const AuthApi = {
   login: (payload) => api.post(`/api/auth/login`, payload),
   register: (payload) => api.post(`/api/auth/register`, payload),
 };
-
