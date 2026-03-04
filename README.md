@@ -203,7 +203,7 @@ git push
 
 #### Step 6 - Deploy Backend on Render
 
-Go to `render.com`
+Go to `https://dashboard.render.com/login`
 
 New -> Web Service
 
