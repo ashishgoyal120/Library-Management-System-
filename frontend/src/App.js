@@ -1,5 +1,5 @@
 import { CssBaseline, ThemeProvider } from '@mui/material';
-import { HashRouter, Navigate, Outlet, Route, Routes, useLocation } from 'react-router-dom';
+import { BrowserRouter, Navigate, Outlet, Route, Routes, useLocation } from 'react-router-dom';
 import { ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import './App.css';
@@ -41,7 +41,7 @@ function AppInner() {
   return (
     <ThemeProvider theme={theme}>
       <CssBaseline />
-      <HashRouter>
+      <BrowserRouter>
         <Routes>
           <Route
             path="/login"
@@ -121,7 +121,7 @@ function AppInner() {
 
           <Route path="*" element={<Navigate to="/dashboard" replace />} />
         </Routes>
-      </HashRouter>
+      </BrowserRouter>
 
       <ToastContainer position="top-right" autoClose={2500} hideProgressBar newestOnTop />
     </ThemeProvider>
