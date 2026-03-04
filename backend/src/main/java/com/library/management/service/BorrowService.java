@@ -33,8 +33,10 @@ public class BorrowService {
     public BorrowRecordDTO issueBook(BorrowRequestDTO req) {
         Book book = bookRepository.findById(req.getBookId())
                 .orElseThrow(() -> new ResourceNotFoundException("Book not found: " + req.getBookId()));
-        User user = userRepository.findById(req.getUserId())
-                .orElseThrow(() -> new ResourceNotFoundException("User not found: " + req.getUserId()));
+        if (!userRepository.existsById(req.getUserId())) {
+            throw new ResourceNotFoundException("User not found: " + req.getUserId());
+        }
+        User user = userRepository.getReferenceById(req.getUserId());
 
         if (book.getAvailableCopies() == null || book.getAvailableCopies() <= 0) {
             throw new BadRequestException("Book is not available to borrow.");
@@ -103,10 +105,7 @@ public class BorrowService {
 
     @Transactional(readOnly = true)
     public List<BorrowRecordDTO> getActiveBorrows() {
-        return borrowRecordRepository.findActiveOrderByDueDateAsc()
-                .stream()
-                .map(Mapper::toDto)
-                .toList();
+        return borrowRecordRepository.findActiveDtos(LocalDate.now());
     }
 
     @Transactional
@@ -115,26 +114,22 @@ public class BorrowService {
         // update status to OVERDUE to reflect spec
         overdue.forEach(br -> br.setStatus(BorrowStatus.OVERDUE));
         borrowRecordRepository.saveAll(overdue);
-        return overdue.stream().map(Mapper::toDto).toList();
+        return borrowRecordRepository.findOverdueDtos(LocalDate.now());
     }
 
     @Transactional(readOnly = true)
     public List<BorrowRecordDTO> getUserHistory(Long userId) {
         // fail fast if user doesn't exist
-        userRepository.findById(userId).orElseThrow(() -> new ResourceNotFoundException("User not found: " + userId));
-        return borrowRecordRepository.findByUser_IdOrderByBorrowDateDesc(userId)
-                .stream()
-                .map(Mapper::toDto)
-                .toList();
+        if (!userRepository.existsById(userId)) {
+            throw new ResourceNotFoundException("User not found: " + userId);
+        }
+        return borrowRecordRepository.findUserHistoryDtos(userId, LocalDate.now());
     }
 
     @Transactional(readOnly = true)
     public List<BorrowRecordDTO> getBookHistory(Long bookId) {
         bookRepository.findById(bookId).orElseThrow(() -> new ResourceNotFoundException("Book not found: " + bookId));
-        return borrowRecordRepository.findByBook_IdOrderByBorrowDateDesc(bookId)
-                .stream()
-                .map(Mapper::toDto)
-                .toList();
+        return borrowRecordRepository.findBookHistoryDtos(bookId, LocalDate.now());
     }
 }
 

@@ -22,14 +22,13 @@ public class UserService {
 
     @Transactional(readOnly = true)
     public List<UserDTO> getAll() {
-        return userRepository.findAll().stream().map(Mapper::toDto).toList();
+        return userRepository.findAllDtos();
     }
 
     @Transactional(readOnly = true)
     public UserDTO getById(Long id) {
-        User u = userRepository.findById(id)
+        return userRepository.findDtoById(id)
                 .orElseThrow(() -> new ResourceNotFoundException("User not found: " + id));
-        return Mapper.toDto(u);
     }
 
     @Transactional
