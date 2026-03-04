@@ -1,8 +1,10 @@
 import axios from "axios";
 
+const API_BASE_URL =
+  process.env.REACT_APP_API_BASE_URL || "http://localhost:8080";
+
 export const api = axios.create({
-  //baseURL: 'http://localhost:8080',
-  baseURL: "https://library-management-system-34c0.onrender.com",
+  baseURL: API_BASE_URL,
   headers: { "Content-Type": "application/json" },
 });
 
