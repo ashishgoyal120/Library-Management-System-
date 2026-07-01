@@ -19,7 +19,7 @@ import {
 } from '@mui/material';
 import { useEffect, useState } from 'react';
 import { toast } from 'react-toastify';
-import { UsersApi, getErrorMessage } from '../../services/api';
+import { UsersApi, getErrorMessage, isValidEmail } from '../../services/api';
 import { ConfirmDialog } from '../Common/ConfirmDialog';
 import { Loader } from '../Common/Loader';
 
@@ -75,6 +75,7 @@ export function MembersPage() {
     try {
       if (!modal.form.name.trim()) return toast.error('Name is required');
       if (!modal.form.email.trim()) return toast.error('Email is required');
+      if (!isValidEmail(modal.form.email)) return toast.error('Invalid email');
       if (!modal.form.membershipDate) return toast.error('Membership date is required');
 
       setModal((m) => ({ ...m, saving: true }));
@@ -239,4 +240,3 @@ export function MembersPage() {
     </Box>
   );
 }
-

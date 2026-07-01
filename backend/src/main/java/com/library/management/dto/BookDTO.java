@@ -15,31 +15,30 @@ import lombok.NoArgsConstructor;
 public class BookDTO {
     private Long id;
 
-    @NotBlank(message = "title is required")
+    @NotBlank(message = "Title is required")
     private String title;
 
     private String isbn;
     private String publisher;
     private Integer publicationYear;
 
-    @NotNull(message = "totalCopies is required")
-    @Min(value = 0, message = "totalCopies must be >= 0")
+    @NotNull(message = "Total copies is required")
+    @Min(value = 0, message = "Total copies cannot be negative")
     private Integer totalCopies;
 
-    @NotNull(message = "availableCopies is required")
-    @Min(value = 0, message = "availableCopies must be >= 0")
+    @NotNull(message = "Available copies is required")
+    @Min(value = 0, message = "Available copies cannot be negative")
     private Integer availableCopies;
 
     private String description;
 
-    @NotNull(message = "authorId is required")
+    @NotNull(message = "Author is required")
     private Long authorId;
 
-    @NotNull(message = "categoryId is required")
+    @NotNull(message = "Category is required")
     private Long categoryId;
 
     // convenience fields in responses
     private String authorName;
     private String categoryName;
 }
-

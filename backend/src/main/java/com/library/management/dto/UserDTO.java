@@ -16,16 +16,16 @@ import lombok.NoArgsConstructor;
 public class UserDTO {
     private Long id;
 
-    @NotBlank(message = "name is required")
+    @NotBlank(message = "Name is required")
     private String name;
 
-    @NotBlank(message = "email is required")
-    @Email(message = "email must be valid")
+    @NotBlank(message = "Email is required")
+    @Email(message = "Invalid email")
     private String email;
 
     private String phone;
     private String address;
 
-    @NotNull(message = "membershipDate is required")
+    @NotNull(message = "Membership date is required")
     private LocalDate membershipDate;
 }

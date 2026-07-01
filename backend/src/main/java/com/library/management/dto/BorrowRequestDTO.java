@@ -13,10 +13,10 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @AllArgsConstructor
 public class BorrowRequestDTO {
-    @NotNull(message = "bookId is required")
+    @NotNull(message = "Book is required")
     private Long bookId;
 
-    @NotNull(message = "userId is required")
+    @NotNull(message = "Member is required")
     private Long userId;
 
     // optional - defaults to today if null
@@ -25,7 +25,6 @@ public class BorrowRequestDTO {
     // optional - if set, overrides dueDays
     private LocalDate dueDate;
 
-    @Min(value = 1, message = "dueDays must be >= 1")
+    @Min(value = 1, message = "Due days must be at least 1")
     private Integer dueDays;
 }
-

@@ -19,6 +19,14 @@ export const api = axios.create({
 });
 
 export function getErrorMessage(err) {
+  const validationErrors = err?.response?.data?.validationErrors;
+  if (validationErrors && typeof validationErrors === "object") {
+    const messages = Object.values(validationErrors).filter(Boolean);
+    if (messages.length > 0) {
+      return messages.join(". ");
+    }
+  }
+
   const msg =
     err?.response?.data?.details ||
     err?.response?.data?.message ||
@@ -26,6 +34,10 @@ export function getErrorMessage(err) {
     err?.message ||
     "Something went wrong";
   return String(msg);
+}
+
+export function isValidEmail(value) {
+  return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(String(value || "").trim());
 }
 
 // Books

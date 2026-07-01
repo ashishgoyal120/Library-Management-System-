@@ -13,9 +13,8 @@ import lombok.NoArgsConstructor;
 public class AuthorDTO {
     private Long id;
 
-    @NotBlank(message = "name is required")
+    @NotBlank(message = "Name is required")
     private String name;
 
     private String bio;
 }
-

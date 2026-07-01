@@ -3,7 +3,7 @@ import { Box, Button, Card, CardContent, Link as MuiLink, Stack, TextField, Typo
 import { useState } from 'react';
 import { Link as RouterLink, useNavigate } from 'react-router-dom';
 import { toast } from 'react-toastify';
-import { AuthApi, getErrorMessage } from '../../services/api';
+import { AuthApi, getErrorMessage, isValidEmail } from '../../services/api';
 import { useAuth } from '../../AuthContext';
 import { AuthPageFrame } from './AuthPageFrame';
 
@@ -28,6 +28,10 @@ export function RegisterPage({ themeMode, onToggleThemeMode }) {
     e.preventDefault();
     if (!form.username.trim() || !form.password || !form.name.trim() || !form.email.trim()) {
       toast.error('Username, password, name and email are required');
+      return;
+    }
+    if (!isValidEmail(form.email)) {
+      toast.error('Invalid email');
       return;
     }
     try {
