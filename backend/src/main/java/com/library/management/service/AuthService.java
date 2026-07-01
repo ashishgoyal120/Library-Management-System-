@@ -34,6 +34,7 @@ public class AuthService {
                 .password(dto.getPassword())
                 .name(dto.getName())
                 .email(dto.getEmail())
+                .countryCode(defaultCountryCode(dto.getCountryCode()))
                 .phone(dto.getPhone())
                 .address(dto.getAddress())
                 .role("ADMIN")
@@ -65,5 +66,9 @@ public class AuthService {
                 .email(u.getEmail())
                 .role(u.getRole())
                 .build();
+    }
+
+    private String defaultCountryCode(String countryCode) {
+        return countryCode == null || countryCode.isBlank() ? "+91" : countryCode;
     }
 }

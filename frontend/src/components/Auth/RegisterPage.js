@@ -1,10 +1,11 @@
 import { PersonAdd } from '@mui/icons-material';
-import { Box, Button, Card, CardContent, Link as MuiLink, Stack, TextField, Typography } from '@mui/material';
+import { Box, Button, Card, CardContent, Link as MuiLink, MenuItem, Stack, TextField, Typography } from '@mui/material';
 import { useState } from 'react';
 import { Link as RouterLink, useNavigate } from 'react-router-dom';
 import { toast } from 'react-toastify';
 import { AuthApi, getErrorMessage, isValidEmail } from '../../services/api';
 import { useAuth } from '../../AuthContext';
+import { countryCodes, defaultCountryCode, digitsOnly } from '../../constants/countryCodes';
 import { AuthPageFrame } from './AuthPageFrame';
 
 export function RegisterPage({ themeMode, onToggleThemeMode }) {
@@ -15,6 +16,7 @@ export function RegisterPage({ themeMode, onToggleThemeMode }) {
     password: '',
     name: '',
     email: '',
+    countryCode: defaultCountryCode,
     phone: '',
     address: '',
   });
@@ -32,6 +34,10 @@ export function RegisterPage({ themeMode, onToggleThemeMode }) {
     }
     if (!isValidEmail(form.email)) {
       toast.error('Invalid email');
+      return;
+    }
+    if (form.phone && form.phone.length < 7) {
+      toast.error('Phone number must be at least 7 digits');
       return;
     }
     try {
@@ -82,7 +88,28 @@ export function RegisterPage({ themeMode, onToggleThemeMode }) {
               />
               <TextField label="Full Name" value={form.name} onChange={(e) => setField('name', e.target.value)} fullWidth />
               <TextField label="Email" value={form.email} onChange={(e) => setField('email', e.target.value)} fullWidth />
-              <TextField label="Phone" value={form.phone} onChange={(e) => setField('phone', e.target.value)} fullWidth />
+              <Stack direction={{ xs: 'column', sm: 'row' }} gap={1.5}>
+                <TextField
+                  select
+                  label="Country Code"
+                  value={form.countryCode}
+                  onChange={(e) => setField('countryCode', e.target.value)}
+                  sx={{ minWidth: { sm: 180 } }}
+                >
+                  {countryCodes.map((option) => (
+                    <MenuItem key={option.code} value={option.code}>
+                      {option.label}
+                    </MenuItem>
+                  ))}
+                </TextField>
+                <TextField
+                  label="Phone"
+                  value={form.phone}
+                  onChange={(e) => setField('phone', digitsOnly(e.target.value))}
+                  inputProps={{ inputMode: 'numeric', pattern: '[0-9]*', maxLength: 15 }}
+                  fullWidth
+                />
+              </Stack>
               <TextField
                 label="Address"
                 value={form.address}

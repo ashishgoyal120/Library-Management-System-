@@ -40,6 +40,7 @@ public class UserService {
         User u = User.builder()
                 .name(dto.getName())
                 .email(dto.getEmail())
+                .countryCode(defaultCountryCode(dto.getCountryCode()))
                 .phone(dto.getPhone())
                 .address(dto.getAddress())
                 .membershipDate(dto.getMembershipDate())
@@ -62,6 +63,7 @@ public class UserService {
 
         u.setName(dto.getName());
         u.setEmail(dto.getEmail());
+        u.setCountryCode(defaultCountryCode(dto.getCountryCode()));
         u.setPhone(dto.getPhone());
         u.setAddress(dto.getAddress());
         u.setMembershipDate(dto.getMembershipDate());
@@ -83,5 +85,9 @@ public class UserService {
 
         userRepository.delete(u);
         log.info("Deleted user id={}", id);
+    }
+
+    private String defaultCountryCode(String countryCode) {
+        return countryCode == null || countryCode.isBlank() ? "+91" : countryCode;
     }
 }

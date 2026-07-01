@@ -3,6 +3,7 @@ package com.library.management.dto;
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
+import jakarta.validation.constraints.Pattern;
 import java.time.LocalDate;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -23,7 +24,12 @@ public class UserDTO {
     @Email(message = "Invalid email")
     private String email;
 
+    @Pattern(regexp = "^\\+\\d{1,4}$", message = "Invalid country code")
+    private String countryCode;
+
+    @Pattern(regexp = "^$|\\d{7,15}$", message = "Phone number must contain 7 to 15 digits")
     private String phone;
+
     private String address;
 
     @NotNull(message = "Membership date is required")

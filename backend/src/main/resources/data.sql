@@ -19,26 +19,28 @@ ON CONFLICT (id) DO UPDATE SET
   description = EXCLUDED.description,
   updated_at = NOW();
 
-INSERT INTO admin_users (id, username, password, name, email, phone, address, role, created_at, updated_at)
+INSERT INTO admin_users (id, username, password, name, email, country_code, phone, address, role, created_at, updated_at)
 VALUES
-  (1, 'admin', 'admin', 'System Admin', 'admin@example.com', NULL, NULL, 'ADMIN', NOW(), NOW())
+  (1, 'admin', 'admin', 'System Admin', 'admin@example.com', '+91', NULL, NULL, 'ADMIN', NOW(), NOW())
 ON CONFLICT (id) DO UPDATE SET
   username = EXCLUDED.username,
   password = EXCLUDED.password,
   name = EXCLUDED.name,
   email = EXCLUDED.email,
+  country_code = EXCLUDED.country_code,
   phone = EXCLUDED.phone,
   address = EXCLUDED.address,
   role = EXCLUDED.role,
   updated_at = NOW();
 
-INSERT INTO members (id, name, email, phone, address, membership_date, created_at, updated_at)
+INSERT INTO members (id, name, email, country_code, phone, address, membership_date, created_at, updated_at)
 VALUES
-  (1, 'Alice Johnson', 'alice@example.com', '9999999999', '123 Main St', CURRENT_DATE, NOW(), NOW()),
-  (2, 'Bob Smith', 'bob@example.com', '8888888888', '456 Park Ave', CURRENT_DATE, NOW(), NOW())
+  (1, 'Alice Johnson', 'alice@example.com', '+91', '9999999999', '123 Main St', CURRENT_DATE, NOW(), NOW()),
+  (2, 'Bob Smith', 'bob@example.com', '+91', '8888888888', '456 Park Ave', CURRENT_DATE, NOW(), NOW())
 ON CONFLICT (id) DO UPDATE SET
   name = EXCLUDED.name,
   email = EXCLUDED.email,
+  country_code = EXCLUDED.country_code,
   phone = EXCLUDED.phone,
   address = EXCLUDED.address,
   updated_at = NOW();

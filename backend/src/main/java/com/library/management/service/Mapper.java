@@ -36,6 +36,7 @@ final class Mapper {
                 .id(u.getId())
                 .name(u.getName())
                 .email(u.getEmail())
+                .countryCode(u.getCountryCode())
                 .phone(u.getPhone())
                 .address(u.getAddress())
                 .membershipDate(u.getMembershipDate())

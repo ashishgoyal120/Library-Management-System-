@@ -8,6 +8,7 @@ import {
   DialogActions,
   DialogContent,
   DialogTitle,
+  MenuItem,
   Stack,
   Table,
   TableBody,
@@ -20,6 +21,7 @@ import {
 import { useEffect, useState } from 'react';
 import { toast } from 'react-toastify';
 import { UsersApi, getErrorMessage, isValidEmail } from '../../services/api';
+import { countryCodes, defaultCountryCode, digitsOnly, formatPhone } from '../../constants/countryCodes';
 import { ConfirmDialog } from '../Common/ConfirmDialog';
 import { Loader } from '../Common/Loader';
 
@@ -28,6 +30,7 @@ const today = () => new Date().toISOString().slice(0, 10);
 const empty = {
   name: '',
   email: '',
+  countryCode: defaultCountryCode,
   phone: '',
   address: '',
   membershipDate: today(),
@@ -64,6 +67,7 @@ export function MembersPage() {
       form: {
         name: u.name || '',
         email: u.email || '',
+        countryCode: u.countryCode || defaultCountryCode,
         phone: u.phone || '',
         address: u.address || '',
         membershipDate: u.membershipDate || today(),
@@ -76,6 +80,7 @@ export function MembersPage() {
       if (!modal.form.name.trim()) return toast.error('Name is required');
       if (!modal.form.email.trim()) return toast.error('Email is required');
       if (!isValidEmail(modal.form.email)) return toast.error('Invalid email');
+      if (modal.form.phone && modal.form.phone.length < 7) return toast.error('Phone number must be at least 7 digits');
       if (!modal.form.membershipDate) return toast.error('Membership date is required');
 
       setModal((m) => ({ ...m, saving: true }));
@@ -148,7 +153,7 @@ export function MembersPage() {
                   <TableRow key={u.id} hover>
                     <TableCell sx={{ fontWeight: 700 }}>{u.name}</TableCell>
                     <TableCell>{u.email}</TableCell>
-                    <TableCell>{u.phone || '-'}</TableCell>
+                    <TableCell>{formatPhone(u.countryCode, u.phone)}</TableCell>
                     <TableCell>{u.membershipDate || '-'}</TableCell>
                     <TableCell align="right">
                       <Stack direction="row" justifyContent="flex-end" gap={1}>
@@ -195,12 +200,28 @@ export function MembersPage() {
               required
               fullWidth
             />
-            <TextField
-              label="Phone"
-              value={modal.form.phone}
-              onChange={(e) => setModal((m) => ({ ...m, form: { ...m.form, phone: e.target.value } }))}
-              fullWidth
-            />
+            <Stack direction={{ xs: 'column', sm: 'row' }} gap={1.5}>
+              <TextField
+                select
+                label="Country Code"
+                value={modal.form.countryCode}
+                onChange={(e) => setModal((m) => ({ ...m, form: { ...m.form, countryCode: e.target.value } }))}
+                sx={{ minWidth: { sm: 180 } }}
+              >
+                {countryCodes.map((option) => (
+                  <MenuItem key={option.code} value={option.code}>
+                    {option.label}
+                  </MenuItem>
+                ))}
+              </TextField>
+              <TextField
+                label="Phone"
+                value={modal.form.phone}
+                onChange={(e) => setModal((m) => ({ ...m, form: { ...m.form, phone: digitsOnly(e.target.value) } }))}
+                inputProps={{ inputMode: 'numeric', pattern: '[0-9]*', maxLength: 15 }}
+                fullWidth
+              />
+            </Stack>
             <TextField
               label="Address"
               value={modal.form.address}

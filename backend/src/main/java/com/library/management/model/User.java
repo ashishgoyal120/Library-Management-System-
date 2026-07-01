@@ -40,6 +40,8 @@ public class User {
     @Column(nullable = false, unique = true)
     private String email;
 
+    private String countryCode;
+
     private String phone;
 
     private String address;

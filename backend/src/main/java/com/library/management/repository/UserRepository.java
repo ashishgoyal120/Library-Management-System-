@@ -16,6 +16,7 @@ public interface UserRepository extends JpaRepository<User, Long> {
                 u.id,
                 u.name,
                 u.email,
+                u.countryCode,
                 u.phone,
                 u.address,
                 u.membershipDate
@@ -30,6 +31,7 @@ public interface UserRepository extends JpaRepository<User, Long> {
                 u.id,
                 u.name,
                 u.email,
+                u.countryCode,
                 u.phone,
                 u.address,
                 u.membershipDate
