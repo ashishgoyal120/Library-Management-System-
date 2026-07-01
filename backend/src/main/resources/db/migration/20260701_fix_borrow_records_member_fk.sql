@@ -3,13 +3,16 @@
 
 BEGIN;
 
+ALTER TABLE members
+  ADD COLUMN IF NOT EXISTS country_code varchar(255);
+
 -- If the old users table has member rows, preserve them in the new members table.
 INSERT INTO members (id, name, email, country_code, phone, address, membership_date, created_at, updated_at)
 SELECT
   u.id,
   u.name,
   u.email,
-  COALESCE(u.country_code, '+91'),
+  '+91',
   u.phone,
   u.address,
   COALESCE(u.membership_date, CURRENT_DATE),
