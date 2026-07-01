@@ -21,6 +21,11 @@ import { RegisterPage } from './components/Auth/RegisterPage';
 import { createAppTheme } from './theme';
 import { AuthProvider, useAuth } from './AuthContext';
 
+const routerBaseName =
+  process.env.PUBLIC_URL
+    ? new URL(process.env.PUBLIC_URL, window.location.origin).pathname.replace(/\/$/, '')
+    : '';
+
 function RequireAuth({ children }) {
   const { user } = useAuth();
   const location = useLocation();
@@ -53,7 +58,7 @@ function AppInner() {
   return (
     <ThemeProvider theme={theme}>
       <CssBaseline />
-      <BrowserRouter future={{ v7_startTransition: true, v7_relativeSplatPath: true }}>
+      <BrowserRouter basename={routerBaseName} future={{ v7_startTransition: true, v7_relativeSplatPath: true }}>
         <Routes>
           <Route
             path="/login"
