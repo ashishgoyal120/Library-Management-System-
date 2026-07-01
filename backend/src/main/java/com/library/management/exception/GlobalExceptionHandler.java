@@ -6,6 +6,7 @@ import java.util.LinkedHashMap;
 import java.util.Map;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.FieldError;
@@ -19,14 +20,17 @@ public class GlobalExceptionHandler {
 
     private static final Logger log = LoggerFactory.getLogger(GlobalExceptionHandler.class);
 
+    @Value("${app.errors.include-details:false}")
+    private boolean includeErrorDetails;
+
     @ExceptionHandler(ResourceNotFoundException.class)
     public ResponseEntity<ApiErrorResponse> handleNotFound(ResourceNotFoundException ex, HttpServletRequest req) {
-        return build(HttpStatus.NOT_FOUND, ex.getMessage(), req.getRequestURI(), null);
+        return build(HttpStatus.NOT_FOUND, ex.getMessage(), req.getRequestURI(), null, null);
     }
 
     @ExceptionHandler(BadRequestException.class)
     public ResponseEntity<ApiErrorResponse> handleBadRequest(BadRequestException ex, HttpServletRequest req) {
-        return build(HttpStatus.BAD_REQUEST, ex.getMessage(), req.getRequestURI(), null);
+        return build(HttpStatus.BAD_REQUEST, ex.getMessage(), req.getRequestURI(), null, null);
     }
 
     @ExceptionHandler(MethodArgumentNotValidException.class)
@@ -35,24 +39,31 @@ public class GlobalExceptionHandler {
         for (FieldError fe : ex.getBindingResult().getFieldErrors()) {
             errors.put(fe.getField(), fe.getDefaultMessage());
         }
-        return build(HttpStatus.BAD_REQUEST, "Validation failed", req.getRequestURI(), errors);
+        return build(HttpStatus.BAD_REQUEST, "Validation failed", req.getRequestURI(), null, errors);
     }
 
     @ExceptionHandler(NoResourceFoundException.class)
     public ResponseEntity<ApiErrorResponse> handleNoResource(NoResourceFoundException ex, HttpServletRequest req) {
-        return build(HttpStatus.NOT_FOUND, "Resource not found", req.getRequestURI(), null);
+        return build(HttpStatus.NOT_FOUND, "Resource not found", req.getRequestURI(), null, null);
     }
 
     @ExceptionHandler(Exception.class)
     public ResponseEntity<ApiErrorResponse> handleGeneric(Exception ex, HttpServletRequest req) {
         log.error("Unhandled error", ex);
-        return build(HttpStatus.INTERNAL_SERVER_ERROR, "Internal server error", req.getRequestURI(), null);
+        return build(
+                HttpStatus.INTERNAL_SERVER_ERROR,
+                "Internal server error",
+                req.getRequestURI(),
+                includeErrorDetails ? rootCauseMessage(ex) : null,
+                null
+        );
     }
 
     private ResponseEntity<ApiErrorResponse> build(
             HttpStatus status,
             String message,
             String path,
+            String details,
             Map<String, String> validationErrors
     ) {
         ApiErrorResponse body = ApiErrorResponse.builder()
@@ -61,9 +72,18 @@ public class GlobalExceptionHandler {
                 .error(status.getReasonPhrase())
                 .message(message)
                 .path(path)
+                .details(details)
                 .validationErrors(validationErrors)
                 .build();
         return ResponseEntity.status(status).body(body);
     }
-}
 
+    private String rootCauseMessage(Exception ex) {
+        Throwable root = ex;
+        while (root.getCause() != null) {
+            root = root.getCause();
+        }
+        String message = root.getMessage();
+        return root.getClass().getSimpleName() + (message == null ? "" : ": " + message);
+    }
+}

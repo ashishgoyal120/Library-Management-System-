@@ -50,7 +50,10 @@ export function BookList() {
 
     req
       .then((res) => mounted && setData(res.data))
-      .catch((err) => toast.error(getErrorMessage(err)))
+      .catch((err) => {
+        if (!mounted) return;
+        toast.error(getErrorMessage(err));
+      })
       .finally(() => mounted && setLoading(false));
     return () => {
       mounted = false;
@@ -228,4 +231,3 @@ export function BookList() {
     </Box>
   );
 }
-

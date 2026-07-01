@@ -1,4 +1,16 @@
-import { MenuBook, People, Category, EditNote, Dashboard as DashboardIcon, Menu } from '@mui/icons-material';
+import {
+  AssignmentReturn,
+  Category,
+  DarkMode,
+  Dashboard as DashboardIcon,
+  EditNote,
+  LightMode,
+  LibraryAdd,
+  Menu,
+  MenuBook,
+  People,
+  WarningAmber,
+} from '@mui/icons-material';
 import {
   AppBar,
   Box,
@@ -10,6 +22,7 @@ import {
   ListItemIcon,
   ListItemText,
   Toolbar,
+  Tooltip,
   Typography,
 } from '@mui/material';
 import { useMemo, useState } from 'react';
@@ -19,7 +32,7 @@ import { useAuth } from '../../AuthContext';
 
 const drawerWidth = 260;
 
-export function AppLayout({ children }) {
+export function AppLayout({ children, themeMode, onToggleThemeMode }) {
   const navigate = useNavigate();
   const location = useLocation();
   const [mobileOpen, setMobileOpen] = useState(false);
@@ -33,22 +46,22 @@ export function AppLayout({ children }) {
       { label: 'Authors', icon: <EditNote />, path: '/authors' },
       { label: 'Categories', icon: <Category />, path: '/categories' },
       { label: 'Members', icon: <People />, path: '/members' },
-      { label: 'Issue Book', icon: <MenuBook />, path: '/borrow/issue' },
-      { label: 'Active Borrows', icon: <MenuBook />, path: '/borrow/active' },
-      { label: 'Overdue', icon: <MenuBook />, path: '/borrow/overdue' },
+      { label: 'Issue Book', icon: <LibraryAdd />, path: '/borrow/issue' },
+      { label: 'Active Borrows', icon: <AssignmentReturn />, path: '/borrow/active' },
+      { label: 'Overdue', icon: <WarningAmber />, path: '/borrow/overdue' },
     ],
     []
   );
 
   const drawer = (
-    <Box sx={{ height: '100%', background: 'white' }}>
-      <Toolbar sx={{ px: 2 }}>
-        <Typography variant="h6" sx={{ fontWeight: 800 }}>
+    <Box sx={{ height: '100%', backgroundColor: 'background.paper' }}>
+      <Toolbar sx={{ px: 3, minHeight: { xs: 64, sm: 72 } }}>
+        <Typography variant="h6" sx={{ fontWeight: 900, letterSpacing: 0 }}>
           Library LMS
         </Typography>
       </Toolbar>
       <Divider />
-      <List sx={{ px: 1 }}>
+      <List sx={{ px: 1.5, py: 2 }}>
         {items.map((it) => {
           const selected = location.pathname === it.path || location.pathname.startsWith(it.path + '/');
           return (
@@ -59,10 +72,24 @@ export function AppLayout({ children }) {
                 navigate(it.path);
                 setMobileOpen(false);
               }}
-              sx={{ borderRadius: 2, my: 0.5 }}
+              sx={{
+                borderRadius: 2,
+                my: 0.5,
+                minHeight: 46,
+                color: selected ? 'primary.dark' : 'text.primary',
+                '&.Mui-selected': {
+                  backgroundColor: themeMode === 'dark' ? 'rgba(37, 99, 235, 0.22)' : '#eef4ff',
+                },
+                '&.Mui-selected:hover': {
+                  backgroundColor: themeMode === 'dark' ? 'rgba(37, 99, 235, 0.3)' : '#e5efff',
+                },
+              }}
             >
-              <ListItemIcon sx={{ minWidth: 36 }}>{it.icon}</ListItemIcon>
-              <ListItemText primary={it.label} />
+              <ListItemIcon sx={{ minWidth: 40, color: 'inherit' }}>{it.icon}</ListItemIcon>
+              <ListItemText
+                primary={it.label}
+                primaryTypographyProps={{ fontWeight: selected ? 800 : 600, fontSize: 15 }}
+              />
             </ListItemButton>
           );
         })}
@@ -77,7 +104,9 @@ export function AppLayout({ children }) {
         color="inherit"
         elevation={0}
         sx={{
-          borderBottom: '1px solid #e5e7eb',
+          borderBottom: '1px solid',
+          borderColor: 'divider',
+          backgroundColor: 'background.paper',
           width: { md: showSidebar ? `calc(100% - ${drawerWidth}px)` : '100%' },
           ml: { md: showSidebar ? `${drawerWidth}px` : 0 },
         }}
@@ -95,17 +124,22 @@ export function AppLayout({ children }) {
           <Typography
             variant="h6"
             noWrap
-            sx={{ fontWeight: 700, lineHeight: 1.2, minWidth: 0, flexShrink: 1 }}
+            sx={{ fontWeight: 800, lineHeight: 1.2, minWidth: 0, flexShrink: 1, letterSpacing: 0 }}
           >
             Library Management System
           </Typography>
           <Box sx={{ flex: 1 }} />
+          <Tooltip title={`Switch to ${themeMode === 'dark' ? 'light' : 'dark'} mode`}>
+            <IconButton onClick={onToggleThemeMode} color="inherit" size="small" sx={{ flexShrink: 0 }}>
+              {themeMode === 'dark' ? <LightMode fontSize="small" /> : <DarkMode fontSize="small" />}
+            </IconButton>
+          </Tooltip>
           {user ? (
             <Box sx={{ display: 'flex', alignItems: 'center', gap: 1, flexShrink: 0 }}>
               <Typography variant="body2" sx={{ color: 'text.secondary' }}>
                 {user.username}
               </Typography>
-              <Button size="small" onClick={logout}>
+              <Button size="small" onClick={logout} sx={{ px: 1.5 }}>
                 Logout
               </Button>
             </Box>
@@ -127,7 +161,7 @@ export function AppLayout({ children }) {
             ModalProps={{ keepMounted: true }}
             sx={{
               display: { xs: 'block', md: 'none' },
-              '& .MuiDrawer-paper': { boxSizing: 'border-box', width: drawerWidth },
+              '& .MuiDrawer-paper': { boxSizing: 'border-box', width: drawerWidth, backgroundColor: 'background.paper' },
             }}
           >
             {drawer}
@@ -137,7 +171,7 @@ export function AppLayout({ children }) {
             open
             sx={{
               display: { xs: 'none', md: 'block' },
-              '& .MuiDrawer-paper': { boxSizing: 'border-box', width: drawerWidth },
+              '& .MuiDrawer-paper': { boxSizing: 'border-box', width: drawerWidth, backgroundColor: 'background.paper' },
             }}
           >
             {drawer}
@@ -146,10 +180,18 @@ export function AppLayout({ children }) {
       )}
 
       {/* Main */}
-      <Box component="main" sx={{ flexGrow: 1, p: 2.5, mt: 8, width: { md: `calc(100% - ${drawerWidth}px)` } }}>
+      <Box
+        component="main"
+        sx={{
+          flexGrow: 1,
+          px: { xs: 2, sm: 3, lg: 4 },
+          py: { xs: 2.5, sm: 3 },
+          mt: 8,
+          width: { md: `calc(100% - ${drawerWidth}px)` },
+        }}
+      >
         {children}
       </Box>
     </Box>
   );
 }
-

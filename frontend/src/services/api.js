@@ -20,6 +20,7 @@ export const api = axios.create({
 
 export function getErrorMessage(err) {
   const msg =
+    err?.response?.data?.details ||
     err?.response?.data?.message ||
     err?.response?.data?.error ||
     err?.message ||

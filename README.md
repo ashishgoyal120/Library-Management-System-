@@ -45,6 +45,7 @@ Update `backend/.env`:
 SPRING_DATASOURCE_URL=jdbc:postgresql://<supabase-pooler-host>:6543/postgres?sslmode=require
 SPRING_DATASOURCE_USERNAME=postgres.<your-project-ref>
 SPRING_DATASOURCE_PASSWORD=<your-database-password>
+SPRING_DATASOURCE_PREPARE_THRESHOLD=0
 
 SPRING_JPA_HIBERNATE_DDL_AUTO=update
 SPRING_JPA_SHOW_SQL=false
@@ -56,6 +57,8 @@ APP_CORS_ALLOWED_ORIGIN_PATTERNS=
 ```
 
 Use the pooler port shown by Supabase. It is commonly `6543`, but your Supabase dashboard is the source of truth.
+
+`SPRING_DATASOURCE_PREPARE_THRESHOLD=0` disables PostgreSQL JDBC server-side prepared statements, which avoids `prepared statement already exists` errors when using the Supabase transaction pooler.
 
 ## 2. Run Backend Locally
 

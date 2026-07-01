@@ -1,4 +1,5 @@
 import { CssBaseline, ThemeProvider } from '@mui/material';
+import { useMemo, useState } from 'react';
 import { BrowserRouter, Navigate, Outlet, Route, Routes, useLocation } from 'react-router-dom';
 import { ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
@@ -17,7 +18,7 @@ import { ActiveBorrowsPage } from './components/Borrow/ActiveBorrowsPage';
 import { OverdueBorrowsPage } from './components/Borrow/OverdueBorrowsPage';
 import { LoginPage } from './components/Auth/LoginPage';
 import { RegisterPage } from './components/Auth/RegisterPage';
-import { theme } from './theme';
+import { createAppTheme } from './theme';
 import { AuthProvider, useAuth } from './AuthContext';
 
 function RequireAuth({ children }) {
@@ -38,6 +39,17 @@ function PublicOnly({ children }) {
 }
 
 function AppInner() {
+  const [themeMode, setThemeMode] = useState(() => localStorage.getItem('themeMode') || 'light');
+  const theme = useMemo(() => createAppTheme(themeMode), [themeMode]);
+
+  function toggleThemeMode() {
+    setThemeMode((current) => {
+      const next = current === 'dark' ? 'light' : 'dark';
+      localStorage.setItem('themeMode', next);
+      return next;
+    });
+  }
+
   return (
     <ThemeProvider theme={theme}>
       <CssBaseline />
@@ -63,7 +75,7 @@ function AppInner() {
           <Route
             element={
               <RequireAuth>
-                <AppLayout>
+                <AppLayout themeMode={themeMode} onToggleThemeMode={toggleThemeMode}>
                   <Outlet />
                 </AppLayout>
               </RequireAuth>
@@ -123,7 +135,7 @@ function AppInner() {
         </Routes>
       </BrowserRouter>
 
-      <ToastContainer position="top-right" autoClose={2500} hideProgressBar newestOnTop />
+      <ToastContainer position="top-right" autoClose={2500} hideProgressBar newestOnTop theme={themeMode} />
     </ThemeProvider>
   );
 }

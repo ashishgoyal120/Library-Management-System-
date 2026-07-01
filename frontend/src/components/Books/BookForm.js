@@ -1,10 +1,10 @@
-import { Save } from '@mui/icons-material';
+import { ArrowBack, Save } from '@mui/icons-material';
 import {
   Box,
   Button,
   Card,
   CardContent,
-  Grid,
+  Divider,
   MenuItem,
   Stack,
   TextField,
@@ -26,6 +26,20 @@ const empty = {
   description: '',
   authorId: '',
   categoryId: '',
+};
+
+const fieldSx = {
+  '& .MuiInputBase-root': {
+    minHeight: 44,
+  },
+};
+
+const selectMenuProps = {
+  PaperProps: {
+    sx: {
+      maxHeight: 280,
+    },
+  },
 };
 
 export function BookForm({ mode }) {
@@ -119,51 +133,67 @@ export function BookForm({ mode }) {
   if (loading) return <Loader minHeight={260} />;
 
   return (
-    <Box component="form" onSubmit={onSubmit}>
-      <Stack direction={{ xs: 'column', md: 'row' }} alignItems={{ md: 'center' }} gap={1.5} sx={{ mb: 2 }}>
+    <Box component="form" onSubmit={onSubmit} sx={{ maxWidth: 1120, mx: 'auto' }}>
+      <Stack
+        direction={{ xs: 'column', md: 'row' }}
+        alignItems={{ md: 'center' }}
+        gap={1.5}
+        sx={{ mb: 3 }}
+      >
         <Box>
-          <Typography variant="h5" sx={{ fontWeight: 800 }}>
+          <Typography variant="h5" sx={{ fontWeight: 900, lineHeight: 1.15 }}>
             {isEdit ? 'Edit Book' : 'Add Book'}
           </Typography>
           <Typography variant="body2" color="text.secondary">
-            Fill in the book details and save.
+            Catalog record
           </Typography>
         </Box>
         <Box sx={{ flex: 1 }} />
-        <Button variant="outlined" onClick={() => navigate(-1)} disabled={saving}>
+        <Button startIcon={<ArrowBack />} variant="outlined" onClick={() => navigate(-1)} disabled={saving}>
           Cancel
         </Button>
         <Button type="submit" startIcon={<Save />} variant="contained" disabled={saving}>
-          Save
+          {saving ? 'Saving...' : 'Save'}
         </Button>
       </Stack>
 
-      <Card>
-        <CardContent>
-          <Grid container spacing={2}>
-            <Grid item xs={12} md={6}>
+      <Card sx={{ overflow: 'hidden' }}>
+        <Box sx={{ px: { xs: 2, sm: 3 }, py: 2, borderBottom: '1px solid', borderColor: 'divider', backgroundColor: 'background.paper' }}>
+          <Typography variant="subtitle1" sx={{ fontWeight: 800 }}>
+            Book information
+          </Typography>
+          <Typography variant="body2" color="text.secondary">
+            Title, identifiers, author, and category
+          </Typography>
+        </Box>
+        <CardContent sx={{ p: { xs: 2, sm: 3 } }}>
+          <Box
+            sx={{
+              display: 'grid',
+              gridTemplateColumns: {
+                xs: '1fr',
+                sm: 'repeat(2, minmax(0, 1fr))',
+                lg: 'repeat(4, minmax(0, 1fr))',
+              },
+              gap: 2.5,
+              alignItems: 'start',
+            }}
+          >
+            <Box sx={{ gridColumn: { xs: '1', sm: 'span 2', lg: 'span 2' } }}>
               <TextField
                 label="Title"
                 value={form.title}
                 onChange={(e) => setField('title', e.target.value)}
                 fullWidth
                 required
+                sx={fieldSx}
               />
-            </Grid>
-            <Grid item xs={12} md={3}>
-              <TextField label="ISBN" value={form.isbn} onChange={(e) => setField('isbn', e.target.value)} fullWidth />
-            </Grid>
-            <Grid item xs={12} md={3}>
-              <TextField
-                label="Publication Year"
-                value={form.publicationYear}
-                onChange={(e) => setField('publicationYear', e.target.value)}
-                fullWidth
-                type="number"
-              />
-            </Grid>
+            </Box>
+            <Box>
+              <TextField label="ISBN" value={form.isbn} onChange={(e) => setField('isbn', e.target.value)} fullWidth sx={fieldSx} />
+            </Box>
 
-            <Grid item xs={12} md={6}>
+            <Box>
               <TextField
                 select
                 label="Author"
@@ -171,15 +201,20 @@ export function BookForm({ mode }) {
                 onChange={(e) => setField('authorId', e.target.value)}
                 fullWidth
                 required
+                SelectProps={{ MenuProps: selectMenuProps }}
+                sx={fieldSx}
               >
+                <MenuItem value="" disabled>
+                  Select author
+                </MenuItem>
                 {authors.map((a) => (
                   <MenuItem key={a.id} value={a.id}>
                     {a.name}
                   </MenuItem>
                 ))}
               </TextField>
-            </Grid>
-            <Grid item xs={12} md={6}>
+            </Box>
+            <Box>
               <TextField
                 select
                 label="Category"
@@ -187,47 +222,76 @@ export function BookForm({ mode }) {
                 onChange={(e) => setField('categoryId', e.target.value)}
                 fullWidth
                 required
+                SelectProps={{ MenuProps: selectMenuProps }}
+                sx={fieldSx}
               >
+                <MenuItem value="" disabled>
+                  Select category
+                </MenuItem>
                 {categories.map((c) => (
                   <MenuItem key={c.id} value={c.id}>
                     {c.name}
                   </MenuItem>
                 ))}
               </TextField>
-            </Grid>
+            </Box>
 
-            <Grid item xs={12} md={6}>
+            <Box>
               <TextField
                 label="Publisher"
                 value={form.publisher}
                 onChange={(e) => setField('publisher', e.target.value)}
                 fullWidth
+                sx={fieldSx}
               />
-            </Grid>
-            <Grid item xs={12} md={3}>
+            </Box>
+            <Box>
               <TextField
-                label="Total Copies"
+                label="Publication Year"
+                value={form.publicationYear}
+                onChange={(e) => setField('publicationYear', e.target.value)}
+                fullWidth
+                type="number"
+                sx={fieldSx}
+              />
+            </Box>
+
+            <Box sx={{ gridColumn: '1 / -1' }}>
+              <Divider sx={{ my: 1 }} />
+            </Box>
+
+            <Box sx={{ gridColumn: '1 / -1' }}>
+              <Typography variant="subtitle2" sx={{ fontWeight: 800 }}>
+                Inventory
+              </Typography>
+            </Box>
+
+            <Box>
+              <TextField
+                label="Total Copies (library owns copies)"
                 value={form.totalCopies}
                 onChange={(e) => setField('totalCopies', e.target.value)}
                 fullWidth
                 type="number"
                 inputProps={{ min: 0 }}
                 required
+                sx={fieldSx}
               />
-            </Grid>
-            <Grid item xs={12} md={3}>
+            </Box>
+            <Box>
               <TextField
-                label="Available Copies"
+                label="Available Copies(currently free to borrow)"
                 value={form.availableCopies}
                 onChange={(e) => setField('availableCopies', e.target.value)}
                 fullWidth
                 type="number"
                 inputProps={{ min: 0 }}
                 required
+                sx={fieldSx}
               />
-            </Grid>
+            </Box>
 
-            <Grid item xs={12}>
+            <Box sx={{ gridColumn: { xs: '1', sm: 'span 2' } }}>
               <TextField
                 label="Description"
                 value={form.description}
@@ -235,12 +299,12 @@ export function BookForm({ mode }) {
                 fullWidth
                 multiline
                 minRows={3}
+                sx={fieldSx}
               />
-            </Grid>
-          </Grid>
+            </Box>
+          </Box>
         </CardContent>
       </Card>
     </Box>
   );
 }
-

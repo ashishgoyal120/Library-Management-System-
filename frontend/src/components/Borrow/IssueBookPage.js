@@ -4,7 +4,6 @@ import {
   Button,
   Card,
   CardContent,
-  Grid,
   MenuItem,
   Stack,
   TextField,
@@ -14,6 +13,21 @@ import { useEffect, useState } from 'react';
 import { toast } from 'react-toastify';
 import { BorrowApi, BooksApi, UsersApi, getErrorMessage } from '../../services/api';
 import { Loader } from '../Common/Loader';
+
+const fieldSx = {
+  '& .MuiInputBase-root': {
+    minHeight: 44,
+  },
+};
+
+const selectMenuProps = {
+  PaperProps: {
+    sx: {
+      maxHeight: 320,
+      minWidth: 320,
+    },
+  },
+};
 
 export function IssueBookPage() {
   const [loading, setLoading] = useState(true);
@@ -66,10 +80,10 @@ export function IssueBookPage() {
   if (loading) return <Loader minHeight={260} />;
 
   return (
-    <Box component="form" onSubmit={issue}>
-      <Stack direction={{ xs: 'column', md: 'row' }} alignItems={{ md: 'center' }} gap={1.5} sx={{ mb: 2 }}>
+    <Box component="form" onSubmit={issue} sx={{ maxWidth: 1120, mx: 'auto' }}>
+      <Stack direction={{ xs: 'column', md: 'row' }} alignItems={{ md: 'center' }} gap={1.5} sx={{ mb: 3 }}>
         <Box>
-          <Typography variant="h5" sx={{ fontWeight: 800 }}>
+          <Typography variant="h5" sx={{ fontWeight: 900, lineHeight: 1.15 }}>
             Issue a Book
           </Typography>
           <Typography variant="body2" color="text.secondary">
@@ -82,10 +96,28 @@ export function IssueBookPage() {
         </Button>
       </Stack>
 
-      <Card>
-        <CardContent>
-          <Grid container spacing={2}>
-            <Grid item xs={12} md={6}>
+      <Card sx={{ overflow: 'hidden' }}>
+        <Box sx={{ px: { xs: 2, sm: 3 }, py: 2, borderBottom: '1px solid', borderColor: 'divider', backgroundColor: 'background.paper' }}>
+          <Typography variant="subtitle1" sx={{ fontWeight: 800 }}>
+            Borrow details
+          </Typography>
+          <Typography variant="body2" color="text.secondary">
+            Member, book, and due date
+          </Typography>
+        </Box>
+        <CardContent sx={{ p: { xs: 2, sm: 3 } }}>
+          <Box
+            sx={{
+              display: 'grid',
+              gridTemplateColumns: {
+                xs: '1fr',
+                md: 'minmax(260px, 1fr) minmax(320px, 1.35fr) minmax(160px, 0.45fr)',
+              },
+              gap: 2.5,
+              alignItems: 'start',
+            }}
+          >
+            <Box>
               <TextField
                 select
                 label="Member"
@@ -93,15 +125,28 @@ export function IssueBookPage() {
                 onChange={(e) => setField('userId', e.target.value)}
                 fullWidth
                 required
+                InputLabelProps={{ shrink: true }}
+                SelectProps={{
+                  displayEmpty: true,
+                  MenuProps: selectMenuProps,
+                  renderValue: (selected) => {
+                    const member = members.find((m) => m.id === Number(selected));
+                    return member ? `${member.name} (${member.email})` : <Typography color="text.secondary">Select member</Typography>;
+                  },
+                }}
+                sx={fieldSx}
               >
+                <MenuItem value="" disabled>
+                  Select member
+                </MenuItem>
                 {members.map((m) => (
                   <MenuItem key={m.id} value={m.id}>
                     {m.name} ({m.email})
                   </MenuItem>
                 ))}
               </TextField>
-            </Grid>
-            <Grid item xs={12} md={6}>
+            </Box>
+            <Box>
               <TextField
                 select
                 label="Book"
@@ -109,15 +154,35 @@ export function IssueBookPage() {
                 onChange={(e) => setField('bookId', e.target.value)}
                 fullWidth
                 required
+                InputLabelProps={{ shrink: true }}
+                SelectProps={{
+                  displayEmpty: true,
+                  MenuProps: selectMenuProps,
+                  renderValue: (selected) => {
+                    const book = books.find((b) => b.id === Number(selected));
+                    return book ? `${book.title} - ${book.authorName || 'Unknown author'} (${book.availableCopies} available)` : <Typography color="text.secondary">Select available book</Typography>;
+                  },
+                }}
+                sx={fieldSx}
               >
+                <MenuItem value="" disabled>
+                  Select available book
+                </MenuItem>
                 {books.map((b) => (
                   <MenuItem key={b.id} value={b.id}>
-                    {b.title} — {b.authorName} (Available: {b.availableCopies})
+                    <Box>
+                      <Typography variant="body2" sx={{ fontWeight: 700 }}>
+                        {b.title}
+                      </Typography>
+                      <Typography variant="caption" color="text.secondary">
+                        {b.authorName || 'Unknown author'} · {b.availableCopies} available
+                      </Typography>
+                    </Box>
                   </MenuItem>
                 ))}
               </TextField>
-            </Grid>
-            <Grid item xs={12} md={3}>
+            </Box>
+            <Box>
               <TextField
                 label="Due Days"
                 type="number"
@@ -125,12 +190,12 @@ export function IssueBookPage() {
                 value={form.dueDays}
                 onChange={(e) => setField('dueDays', e.target.value)}
                 fullWidth
+                sx={fieldSx}
               />
-            </Grid>
-          </Grid>
+            </Box>
+          </Box>
         </CardContent>
       </Card>
     </Box>
   );
 }
-
