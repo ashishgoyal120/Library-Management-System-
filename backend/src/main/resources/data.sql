@@ -19,13 +19,24 @@ ON CONFLICT (id) DO UPDATE SET
   description = EXCLUDED.description,
   updated_at = NOW();
 
-INSERT INTO users (id, username, password, name, email, phone, address, membership_date, created_at, updated_at)
+INSERT INTO admin_users (id, username, password, name, email, phone, address, role, created_at, updated_at)
 VALUES
-  (1, 'alice', 'password123', 'Alice Johnson', 'alice@example.com', '9999999999', '123 Main St', CURRENT_DATE, NOW(), NOW()),
-  (2, 'bob', 'password123', 'Bob Smith', 'bob@example.com', '8888888888', '456 Park Ave', CURRENT_DATE, NOW(), NOW())
+  (1, 'admin', 'admin', 'System Admin', 'admin@example.com', NULL, NULL, 'ADMIN', NOW(), NOW())
 ON CONFLICT (id) DO UPDATE SET
   username = EXCLUDED.username,
   password = EXCLUDED.password,
+  name = EXCLUDED.name,
+  email = EXCLUDED.email,
+  phone = EXCLUDED.phone,
+  address = EXCLUDED.address,
+  role = EXCLUDED.role,
+  updated_at = NOW();
+
+INSERT INTO members (id, name, email, phone, address, membership_date, created_at, updated_at)
+VALUES
+  (1, 'Alice Johnson', 'alice@example.com', '9999999999', '123 Main St', CURRENT_DATE, NOW(), NOW()),
+  (2, 'Bob Smith', 'bob@example.com', '8888888888', '456 Park Ave', CURRENT_DATE, NOW(), NOW())
+ON CONFLICT (id) DO UPDATE SET
   name = EXCLUDED.name,
   email = EXCLUDED.email,
   phone = EXCLUDED.phone,
@@ -50,5 +61,6 @@ ON CONFLICT (id) DO UPDATE SET
 
 SELECT setval(pg_get_serial_sequence('authors', 'id'), COALESCE((SELECT MAX(id) FROM authors), 1), true);
 SELECT setval(pg_get_serial_sequence('categories', 'id'), COALESCE((SELECT MAX(id) FROM categories), 1), true);
-SELECT setval(pg_get_serial_sequence('users', 'id'), COALESCE((SELECT MAX(id) FROM users), 1), true);
+SELECT setval(pg_get_serial_sequence('admin_users', 'id'), COALESCE((SELECT MAX(id) FROM admin_users), 1), true);
+SELECT setval(pg_get_serial_sequence('members', 'id'), COALESCE((SELECT MAX(id) FROM members), 1), true);
 SELECT setval(pg_get_serial_sequence('books', 'id'), COALESCE((SELECT MAX(id) FROM books), 1), true);

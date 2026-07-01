@@ -11,12 +11,9 @@ import org.springframework.data.repository.query.Param;
 public interface UserRepository extends JpaRepository<User, Long> {
     Optional<User> findByEmailIgnoreCase(String email);
 
-    Optional<User> findByUsernameIgnoreCase(String username);
-
     @Query("""
             SELECT new com.library.management.dto.UserDTO(
                 u.id,
-                u.username,
                 u.name,
                 u.email,
                 u.phone,
@@ -31,7 +28,6 @@ public interface UserRepository extends JpaRepository<User, Long> {
     @Query("""
             SELECT new com.library.management.dto.UserDTO(
                 u.id,
-                u.username,
                 u.name,
                 u.email,
                 u.phone,
@@ -43,4 +39,3 @@ public interface UserRepository extends JpaRepository<User, Long> {
             """)
     Optional<UserDTO> findDtoById(@Param("id") Long id);
 }
-

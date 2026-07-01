@@ -16,8 +16,6 @@ import lombok.NoArgsConstructor;
 public class UserDTO {
     private Long id;
 
-    private String username;
-
     @NotBlank(message = "name is required")
     private String name;
 
@@ -31,4 +29,3 @@ public class UserDTO {
     @NotNull(message = "membershipDate is required")
     private LocalDate membershipDate;
 }
-

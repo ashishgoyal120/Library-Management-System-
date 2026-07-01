@@ -13,6 +13,15 @@ A full-stack Library Management System with a React frontend, Spring Boot backen
 
 The current deployment uses GitHub Pages for the frontend only. The backend runs locally and connects to Supabase. Render is not required for the current setup.
 
+## Data Model
+
+The app separates login accounts from library members:
+
+- `admin_users`: application users who register and log in to manage the system. Registered users receive the `ADMIN` role.
+- `members`: library members/patrons who borrow books. These are managed from the Members screen.
+
+Registration does not create a library member. Members are a separate entity and are created from the Members page.
+
 ## Important Architecture Note
 
 GitHub Pages can host only static frontend files. It cannot run the Spring Boot backend.
@@ -99,6 +108,8 @@ http://localhost:8080/api/dashboard/stats
 ```
 
 The backend must be running before login, register, books, members, borrow, and dashboard features can work.
+
+On first startup after the model split, Hibernate creates the `admin_users` and `members` tables in Supabase. The old overloaded `users` table is no longer used by the application.
 
 ## Frontend Local Configuration
 
@@ -208,7 +219,7 @@ If login shows a browser CORS error, confirm:
 
 ## Optional Sample Data
 
-`backend/src/main/resources/data.sql` contains PostgreSQL-compatible sample data.
+`backend/src/main/resources/data.sql` contains PostgreSQL-compatible sample data for authors, categories, one admin user, members, and books.
 
 By default, sample data is disabled:
 
@@ -240,6 +251,8 @@ Auth:
 
 - `POST /api/auth/register`
 - `POST /api/auth/login`
+
+Auth endpoints use the `admin_users` table.
 
 Books:
 
@@ -275,6 +288,8 @@ Users/Members:
 - `PUT /api/users/{id}`
 - `DELETE /api/users/{id}`
 
+These endpoints manage library members in the `members` table. The `/api/users` path is kept for API compatibility, but it does not manage admin login accounts.
+
 Borrow/Return:
 
 - `POST /api/borrow/issue`
@@ -295,3 +310,4 @@ Dashboard:
 - The Spring Boot backend contains the REST API and must be running for the app to work.
 - GitHub Pages hosts the React frontend only.
 - Render deployment has been removed from the current project setup.
+- Admin login accounts and library members are stored in separate tables.
