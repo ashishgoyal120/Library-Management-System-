@@ -111,6 +111,14 @@ The backend must be running before login, register, books, members, borrow, and 
 
 On first startup after the model split, Hibernate creates the `admin_users` and `members` tables in Supabase. The old overloaded `users` table is no longer used by the application.
 
+If your Supabase database existed before this split, run this one-time SQL migration in Supabase SQL Editor:
+
+```text
+backend/src/main/resources/db/migration/20260701_fix_borrow_records_member_fk.sql
+```
+
+It changes `borrow_records` from the old `users` foreign key to the new `members` foreign key.
+
 ## Frontend Local Configuration
 
 Create `frontend/.env.local` from the example file:

@@ -39,7 +39,7 @@ public class BorrowRecord {
     private Book book;
 
     @ManyToOne(fetch = FetchType.LAZY, optional = false)
-    @JoinColumn(name = "user_id", nullable = false)
+    @JoinColumn(name = "member_id", nullable = false)
     private User user;
 
     @Column(nullable = false)
@@ -75,4 +75,3 @@ public class BorrowRecord {
         updatedAt = LocalDateTime.now();
     }
 }
-
