@@ -12,7 +12,7 @@ public class CorsConfig implements WebMvcConfigurer {
     @Value("${app.cors.allowed-origins:http://localhost:3000}")
     private String allowedOrigins;
 
-    @Value("${app.cors.allowed-origin-patterns:https://*.onrender.com}")
+    @Value("${app.cors.allowed-origin-patterns:}")
     private String allowedOriginPatterns;
 
     @Override
@@ -28,13 +28,16 @@ public class CorsConfig implements WebMvcConfigurer {
                 .filter(s -> !s.isEmpty())
                 .toArray(String[]::new);
 
-        registry.addMapping("/**")
-                .allowedOrigins(origins)
-                .allowedOriginPatterns(originPatterns)
-                .allowedMethods("GET", "POST", "PUT", "DELETE", "OPTIONS")
-                .allowedHeaders("*")
-                .allowCredentials(true)
-                .maxAge(3600);
+        var registration = registry.addMapping("/**")
+                .allowedOrigins(origins);
+
+        if (originPatterns.length > 0) {
+            registration.allowedOriginPatterns(originPatterns);
+        }
+
+        registration.allowedMethods("GET", "POST", "PUT", "DELETE", "OPTIONS")
+                    .allowedHeaders("*")
+                    .allowCredentials(true)
+                    .maxAge(3600);
     }
 }
-
