@@ -1,0 +1,110 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1920" height="1200" viewBox="0 0 1920 1200" role="img" aria-label="Library shelves with warm reading lights">
+  <defs>
+    <linearGradient id="sky" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0" stop-color="#10233f"/>
+      <stop offset="0.46" stop-color="#1f3b58"/>
+      <stop offset="1" stop-color="#2f5f73"/>
+    </linearGradient>
+    <linearGradient id="lamp" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#ffd48a" stop-opacity="0.9"/>
+      <stop offset="1" stop-color="#f59e0b" stop-opacity="0"/>
+    </linearGradient>
+    <linearGradient id="shelf" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#27415d"/>
+      <stop offset="1" stop-color="#18283d"/>
+    </linearGradient>
+    <filter id="soft" x="-20%" y="-20%" width="140%" height="140%">
+      <feGaussianBlur stdDeviation="26"/>
+    </filter>
+  </defs>
+
+  <rect width="1920" height="1200" fill="url(#sky)"/>
+  <circle cx="340" cy="190" r="260" fill="#38bdf8" opacity="0.14" filter="url(#soft)"/>
+  <circle cx="1570" cy="230" r="320" fill="#fbbf24" opacity="0.12" filter="url(#soft)"/>
+  <circle cx="1280" cy="980" r="360" fill="#14b8a6" opacity="0.12" filter="url(#soft)"/>
+
+  <g opacity="0.84">
+    <rect x="120" y="250" width="1680" height="36" rx="8" fill="#0f172a" opacity="0.46"/>
+    <rect x="120" y="492" width="1680" height="36" rx="8" fill="#0f172a" opacity="0.46"/>
+    <rect x="120" y="734" width="1680" height="36" rx="8" fill="#0f172a" opacity="0.46"/>
+    <rect x="120" y="976" width="1680" height="36" rx="8" fill="#0f172a" opacity="0.46"/>
+  </g>
+
+  <g opacity="0.78">
+    <path d="M196 278h1508v214H196z" fill="url(#shelf)" opacity="0.36"/>
+    <path d="M196 520h1508v214H196z" fill="url(#shelf)" opacity="0.32"/>
+    <path d="M196 762h1508v214H196z" fill="url(#shelf)" opacity="0.28"/>
+  </g>
+
+  <g opacity="0.9">
+    <g transform="translate(188 312)">
+      <rect width="32" height="150" rx="5" fill="#60a5fa"/>
+      <rect x="42" width="24" height="150" rx="5" fill="#f97316"/>
+      <rect x="76" width="38" height="150" rx="5" fill="#34d399"/>
+      <rect x="126" width="28" height="150" rx="5" fill="#c084fc"/>
+      <rect x="166" width="44" height="150" rx="5" fill="#facc15"/>
+      <rect x="224" width="30" height="150" rx="5" fill="#fb7185"/>
+      <rect x="268" width="36" height="150" rx="5" fill="#22d3ee"/>
+    </g>
+    <g transform="translate(560 312)">
+      <rect width="38" height="150" rx="5" fill="#f59e0b"/>
+      <rect x="50" width="30" height="150" rx="5" fill="#38bdf8"/>
+      <rect x="94" width="44" height="150" rx="5" fill="#a78bfa"/>
+      <rect x="152" width="28" height="150" rx="5" fill="#2dd4bf"/>
+      <rect x="194" width="42" height="150" rx="5" fill="#fb7185"/>
+      <rect x="250" width="30" height="150" rx="5" fill="#86efac"/>
+    </g>
+    <g transform="translate(1090 312)">
+      <rect width="30" height="150" rx="5" fill="#f97316"/>
+      <rect x="42" width="42" height="150" rx="5" fill="#60a5fa"/>
+      <rect x="96" width="26" height="150" rx="5" fill="#facc15"/>
+      <rect x="134" width="50" height="150" rx="5" fill="#34d399"/>
+      <rect x="198" width="34" height="150" rx="5" fill="#c084fc"/>
+      <rect x="246" width="38" height="150" rx="5" fill="#fb7185"/>
+    </g>
+    <g transform="translate(1500 312)">
+      <rect width="40" height="150" rx="5" fill="#38bdf8"/>
+      <rect x="52" width="28" height="150" rx="5" fill="#f59e0b"/>
+      <rect x="94" width="38" height="150" rx="5" fill="#2dd4bf"/>
+      <rect x="146" width="46" height="150" rx="5" fill="#a78bfa"/>
+    </g>
+  </g>
+
+  <g opacity="0.82">
+    <g transform="translate(250 554)">
+      <rect width="42" height="150" rx="5" fill="#fb7185"/>
+      <rect x="56" width="28" height="150" rx="5" fill="#facc15"/>
+      <rect x="98" width="48" height="150" rx="5" fill="#60a5fa"/>
+      <rect x="160" width="34" height="150" rx="5" fill="#34d399"/>
+      <rect x="208" width="40" height="150" rx="5" fill="#f97316"/>
+    </g>
+    <g transform="translate(740 554)">
+      <rect width="34" height="150" rx="5" fill="#38bdf8"/>
+      <rect x="48" width="42" height="150" rx="5" fill="#c084fc"/>
+      <rect x="104" width="28" height="150" rx="5" fill="#86efac"/>
+      <rect x="146" width="52" height="150" rx="5" fill="#f59e0b"/>
+      <rect x="212" width="36" height="150" rx="5" fill="#fb7185"/>
+    </g>
+    <g transform="translate(1240 554)">
+      <rect width="46" height="150" rx="5" fill="#34d399"/>
+      <rect x="60" width="30" height="150" rx="5" fill="#f97316"/>
+      <rect x="104" width="44" height="150" rx="5" fill="#60a5fa"/>
+      <rect x="162" width="32" height="150" rx="5" fill="#facc15"/>
+      <rect x="208" width="38" height="150" rx="5" fill="#a78bfa"/>
+    </g>
+  </g>
+
+  <g opacity="0.7">
+    <path d="M395 188h180l-32 70H427z" fill="#f8fafc" opacity="0.24"/>
+    <rect x="426" y="174" width="116" height="16" rx="8" fill="#f8fafc" opacity="0.34"/>
+    <path d="M395 188h180l-98 300z" fill="url(#lamp)"/>
+    <path d="M1360 194h180l-34 74h-112z" fill="#f8fafc" opacity="0.22"/>
+    <rect x="1392" y="180" width="116" height="16" rx="8" fill="#f8fafc" opacity="0.32"/>
+    <path d="M1360 194h180l-96 332z" fill="url(#lamp)"/>
+  </g>
+
+  <g opacity="0.42">
+    <path d="M0 1030c300-126 524-118 804-38 270 76 523 96 1116-90v298H0z" fill="#020617"/>
+  </g>
+  <rect width="1920" height="1200" fill="#020617" opacity="0.2"/>
+</svg>

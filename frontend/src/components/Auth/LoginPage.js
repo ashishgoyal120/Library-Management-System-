@@ -5,7 +5,7 @@ import { Link as RouterLink, Navigate, useLocation, useNavigate } from 'react-ro
 import { toast } from 'react-toastify';
 import { AuthApi, getErrorMessage } from '../../services/api';
 import { useAuth } from '../../AuthContext';
-import { ThemeModeToggle } from '../Common/ThemeModeToggle';
+import { AuthPageFrame } from './AuthPageFrame';
 
 export function LoginPage({ themeMode, onToggleThemeMode }) {
   const { user, login } = useAuth();
@@ -44,21 +44,15 @@ export function LoginPage({ themeMode, onToggleThemeMode }) {
   }
 
   return (
-    <Box sx={{ display: 'flex', justifyContent: 'center', mt: 10 }}>
-      <ThemeModeToggle
-        themeMode={themeMode}
-        onToggleThemeMode={onToggleThemeMode}
+    <AuthPageFrame themeMode={themeMode} onToggleThemeMode={onToggleThemeMode}>
+      <Card
         sx={{
-          position: 'fixed',
-          top: 16,
-          right: 16,
-          border: '1px solid',
-          borderColor: 'divider',
-          backgroundColor: 'background.paper',
-          '&:hover': { backgroundColor: 'action.hover' },
+          width: 380,
+          backgroundColor: (theme) =>
+            theme.palette.mode === 'dark' ? 'rgba(17, 24, 39, 0.9)' : 'rgba(255, 255, 255, 0.92)',
+          backdropFilter: 'blur(14px)',
         }}
-      />
-      <Card sx={{ width: 380 }}>
+      >
         <CardContent>
           <Typography variant="h5" sx={{ fontWeight: 800, mb: 1 }}>
             Library Login
@@ -111,6 +105,6 @@ export function LoginPage({ themeMode, onToggleThemeMode }) {
           </Typography>
         </CardContent>
       </Card>
-    </Box>
+    </AuthPageFrame>
   );
 }

@@ -5,7 +5,7 @@ import { Link as RouterLink, useNavigate } from 'react-router-dom';
 import { toast } from 'react-toastify';
 import { AuthApi, getErrorMessage } from '../../services/api';
 import { useAuth } from '../../AuthContext';
-import { ThemeModeToggle } from '../Common/ThemeModeToggle';
+import { AuthPageFrame } from './AuthPageFrame';
 
 export function RegisterPage({ themeMode, onToggleThemeMode }) {
   const { login } = useAuth();
@@ -44,21 +44,15 @@ export function RegisterPage({ themeMode, onToggleThemeMode }) {
   }
 
   return (
-    <Box sx={{ display: 'flex', justifyContent: 'center', mt: 6 }}>
-      <ThemeModeToggle
-        themeMode={themeMode}
-        onToggleThemeMode={onToggleThemeMode}
+    <AuthPageFrame themeMode={themeMode} onToggleThemeMode={onToggleThemeMode} compact>
+      <Card
         sx={{
-          position: 'fixed',
-          top: 16,
-          right: 16,
-          border: '1px solid',
-          borderColor: 'divider',
-          backgroundColor: 'background.paper',
-          '&:hover': { backgroundColor: 'action.hover' },
+          width: 420,
+          backgroundColor: (theme) =>
+            theme.palette.mode === 'dark' ? 'rgba(17, 24, 39, 0.9)' : 'rgba(255, 255, 255, 0.92)',
+          backdropFilter: 'blur(14px)',
         }}
-      />
-      <Card sx={{ width: 420 }}>
+      >
         <CardContent>
           <Typography variant="h5" sx={{ fontWeight: 800, mb: 1 }}>
             Register
@@ -119,6 +113,6 @@ export function RegisterPage({ themeMode, onToggleThemeMode }) {
           </Typography>
         </CardContent>
       </Card>
-    </Box>
+    </AuthPageFrame>
   );
 }
