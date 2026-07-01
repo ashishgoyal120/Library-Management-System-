@@ -1,12 +1,13 @@
 import { LockOpen } from '@mui/icons-material';
-import { Box, Button, Card, CardContent, Stack, TextField, Typography } from '@mui/material';
+import { Box, Button, Card, CardContent, Link as MuiLink, Stack, TextField, Typography } from '@mui/material';
 import { useState } from 'react';
-import { Link, Navigate, useLocation, useNavigate } from 'react-router-dom';
+import { Link as RouterLink, Navigate, useLocation, useNavigate } from 'react-router-dom';
 import { toast } from 'react-toastify';
 import { AuthApi, getErrorMessage } from '../../services/api';
 import { useAuth } from '../../AuthContext';
+import { ThemeModeToggle } from '../Common/ThemeModeToggle';
 
-export function LoginPage() {
+export function LoginPage({ themeMode, onToggleThemeMode }) {
   const { user, login } = useAuth();
   const navigate = useNavigate();
   const location = useLocation();
@@ -44,6 +45,19 @@ export function LoginPage() {
 
   return (
     <Box sx={{ display: 'flex', justifyContent: 'center', mt: 10 }}>
+      <ThemeModeToggle
+        themeMode={themeMode}
+        onToggleThemeMode={onToggleThemeMode}
+        sx={{
+          position: 'fixed',
+          top: 16,
+          right: 16,
+          border: '1px solid',
+          borderColor: 'divider',
+          backgroundColor: 'background.paper',
+          '&:hover': { backgroundColor: 'action.hover' },
+        }}
+      />
       <Card sx={{ width: 380 }}>
         <CardContent>
           <Typography variant="h5" sx={{ fontWeight: 800, mb: 1 }}>
@@ -83,11 +97,20 @@ export function LoginPage() {
           </Box>
 
           <Typography variant="body2" sx={{ mt: 3 }}>
-            Don&apos;t have an account? <Link to="/register">Register here</Link>
+            Don&apos;t have an account?{' '}
+            <MuiLink
+              component={RouterLink}
+              to="/register"
+              sx={{
+                color: (theme) => (theme.palette.mode === 'dark' ? '#93c5fd' : 'primary.main'),
+                fontWeight: 700,
+              }}
+            >
+              Register here
+            </MuiLink>
           </Typography>
         </CardContent>
       </Card>
     </Box>
   );
 }
-

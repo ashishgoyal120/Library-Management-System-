@@ -1,10 +1,8 @@
 import {
   AssignmentReturn,
   Category,
-  DarkMode,
   Dashboard as DashboardIcon,
   EditNote,
-  LightMode,
   LibraryAdd,
   Menu,
   MenuBook,
@@ -22,13 +20,13 @@ import {
   ListItemIcon,
   ListItemText,
   Toolbar,
-  Tooltip,
   Typography,
 } from '@mui/material';
 import { useMemo, useState } from 'react';
 import { useLocation, useNavigate } from 'react-router-dom';
 import { Button } from '@mui/material';
 import { useAuth } from '../../AuthContext';
+import { ThemeModeToggle } from './ThemeModeToggle';
 
 const drawerWidth = 260;
 
@@ -129,11 +127,7 @@ export function AppLayout({ children, themeMode, onToggleThemeMode }) {
             Library Management System
           </Typography>
           <Box sx={{ flex: 1 }} />
-          <Tooltip title={`Switch to ${themeMode === 'dark' ? 'light' : 'dark'} mode`}>
-            <IconButton onClick={onToggleThemeMode} color="inherit" size="small" sx={{ flexShrink: 0 }}>
-              {themeMode === 'dark' ? <LightMode fontSize="small" /> : <DarkMode fontSize="small" />}
-            </IconButton>
-          </Tooltip>
+          <ThemeModeToggle themeMode={themeMode} onToggleThemeMode={onToggleThemeMode} />
           {user ? (
             <Box sx={{ display: 'flex', alignItems: 'center', gap: 1, flexShrink: 0 }}>
               <Typography variant="body2" sx={{ color: 'text.secondary' }}>

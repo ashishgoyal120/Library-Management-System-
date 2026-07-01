@@ -64,7 +64,7 @@ function AppInner() {
             path="/login"
             element={
               <PublicOnly>
-                <LoginPage />
+                <LoginPage themeMode={themeMode} onToggleThemeMode={toggleThemeMode} />
               </PublicOnly>
             }
           />
@@ -72,7 +72,7 @@ function AppInner() {
             path="/register"
             element={
               <PublicOnly>
-                <RegisterPage />
+                <RegisterPage themeMode={themeMode} onToggleThemeMode={toggleThemeMode} />
               </PublicOnly>
             }
           />
